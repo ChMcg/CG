@@ -1,9 +1,6 @@
-import PyQt5
 from PyQt5 import QtCore, QtGui, QtWidgets, Qt
-
 from ui.mainwindow import Ui_MainWindow as MainWindow
-
-from lab_1 import Lab_1, DrawArea
+from lab_1 import Lab_1
 
 
 class Window(QtWidgets.QMainWindow):

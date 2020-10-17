@@ -1,7 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets, Qt
-from PyQt5.QtCore import qDebug
 from ui.lab_1 import Ui_Form as ui_lab_1
-from src.Drawable import Cube, Axes
+from src.Drawable import Cube
 
 
 class DrawArea(QtWidgets.QWidget):

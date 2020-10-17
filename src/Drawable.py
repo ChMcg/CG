@@ -1,11 +1,8 @@
-import enum
-from functools import reduce
 from PyQt5 import QtCore, QtGui, QtWidgets, Qt
 from typing import Tuple, List
 import numpy as np
 from numpy.matrixlib import matrix
 from itertools import chain
-from enum import Enum
 from math import sin, cos, radians
 
 
@@ -92,12 +89,6 @@ def point_2d(x: int, y: int) -> matrix:
             [y]
         ]
     )
-
-
-class Axes(Enum):
-    X = 0
-    Y = 1
-    Z = 2
 
 
 class Cube:
