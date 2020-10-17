@@ -8,7 +8,8 @@ class Window(QtWidgets.QMainWindow):
         super(Window, self).__init__()
         self.ui: MainWindow = MainWindow()
         self.ui.setupUi(self)
-        self.ui.verticalLayout.addWidget(Lab_1(self.ui.centralwidget))
+        # self.ui.verticalLayout.addWidget(Lab_1(self.ui.centralwidget))
+        self.ui.tabWidget.addTab(Lab_1(self.ui.tabWidget), 'Лабораторная 1')
         self.setGeometry(QtCore.QRect(0, 0, 0, 0))
 
     def keyPressEvent(self, e: Qt.QKeyEvent):

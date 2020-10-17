@@ -35,6 +35,9 @@ class Lab_1(QtWidgets.QWidget):
         self.ui.rotateX.valueChanged.connect(self.s_cube_rotation)
         self.ui.rotateY.valueChanged.connect(self.s_cube_rotation)
         self.ui.rotateZ.valueChanged.connect(self.s_cube_rotation)
+        self.ui.rotateX.valueChanged.connect(lambda: self.ui.labelX.setText(str(self.ui.rotateX.value())))
+        self.ui.rotateY.valueChanged.connect(lambda: self.ui.labelY.setText(str(self.ui.rotateY.value())))
+        self.ui.rotateZ.valueChanged.connect(lambda: self.ui.labelZ.setText(str(self.ui.rotateZ.value())))
 
     def setupUi(self, target: QtWidgets.QWidget):
         self.ui.setupUi(target)
