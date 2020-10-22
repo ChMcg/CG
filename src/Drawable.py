@@ -71,3 +71,41 @@ class Cube:
         for i, r in enumerate([rX, rY, rZ]):
             self.current_rotation[i] = r
         self.lines = self.gen_lines()
+
+    def rotate(self, rX: int, rY: int, rZ: int):
+        for point in self.points:
+            point.rotate( rX, rY, rZ)
+        self.lines = self.gen_lines()
+
+
+class AxisType(Enum):
+    X = 0
+    Y = 1
+    Z = 2
+
+
+class Axis:
+    def __init__(self, length: int, center: Tuple[int, int], kind: AxisType):
+        self.length = length
+        self.center = v3((*center, 0))
+        if kind is AxisType.X:
+            self.point = v3((length, 0, 0))
+            self.label = "x"
+        if kind is AxisType.Y:
+            self.point = v3((0, length, 0))
+            self.label = "y"
+        if kind is AxisType.Z:
+            self.point = v3((0, 0, length))
+            self.label = "z"
+
+    def draw(self, painter: QtGui.QPainter):
+        painter.drawLine(
+            QtCore.QLine(
+                self.center.to_v2().to_QPoint(),
+                (self.point + self.center).to_v2().to_QPoint()
+            )
+        )
+        painter.drawText((self.center + self.point).to_v2().to_QPoint() + QPoint(5, 5), self.label)
+
+    def rotate(self, rX: int, rY: int, rZ: int):
+        self.point.rotate(rX, rY, rZ)
