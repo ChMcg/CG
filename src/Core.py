@@ -38,6 +38,13 @@ class v3:
         m: matrix = self.m * sec
         return m
 
+    def __truediv__(self, other: int) -> v3:
+        m: matrix = self.m * (1 / other)
+        return v3(tuple(chain(*m.tolist())))
+
+    def __list__(self) -> List:
+        return list(chain(*self.m.tolist()))
+
     def x_rotate(self, angle: int):
         a = radians(angle)
         tmp = matrix([

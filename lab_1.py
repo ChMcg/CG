@@ -8,6 +8,8 @@ class DrawArea(QtWidgets.QWidget):
         super().__init__(parent)
         self.mainPen = QtGui.QPen(QtGui.QColor(0x0d47a1), 3)
         self.axisPen = QtGui.QPen(QtGui.QColor(0x000000), 3)
+        self.polygonsPen = QtGui.QPen(QtGui.QColor(0x000000), 3)
+        self.polygonsBrush = QtGui.QBrush(QtGui.QColor(0x0d47a1))
         self.setGeometry(parent.geometry())
         self.a = QtCore.QPoint(
             self.geometry().height() // 2,
@@ -27,6 +29,10 @@ class DrawArea(QtWidgets.QWidget):
         self.painter.begin(self)
         self.painter.setPen(self.mainPen)
         self.cube.draw(self.painter)
+        # self.painter.setPen(self.polygonsPen)
+        # self.painter.setBrush(self.polygonsBrush)
+        # self.cube.draw_polygons(self.painter)
+        # # self.painter.setBrush()
         self.painter.setPen(self.axisPen)
         for axis in self.axis:
             axis.draw(self.painter)
