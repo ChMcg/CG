@@ -10,10 +10,21 @@ from math import sin, cos, radians
 class v2:
     def __init__(self, vec: Tuple[int, int]):
         self.m = point_2d(*vec)
+        self.x, self.y = vec
+
+    def __str__(self) -> str:
+        tmp = ','.join([str(x) for x in list(chain(*self.m.tolist()))])
+        return f"({tmp})"
+    
+    def __repr__(self) -> str:
+        return str(self)
 
     def to_QPoint(self) -> QtCore.QPoint:
         x, y = list(chain(*self.m.tolist()))
         return QtCore.QPoint(x, y)
+
+    def to_list(self) -> List[int]:
+        return list(chain(*self.m.tolist()))
 
 
 class v3:

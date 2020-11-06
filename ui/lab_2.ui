@@ -6,58 +6,89 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>673</width>
-    <height>759</height>
+    <width>648</width>
+    <height>712</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QWidget" name="">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>50</y>
-     <width>632</width>
-     <height>586</height>
-    </rect>
-   </property>
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QWidget" name="drawArea" native="true">
-      <property name="minimumSize">
-       <size>
-        <width>550</width>
-        <height>550</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QSlider" name="verticalSlider">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="tickPosition">
-       <enum>QSlider::TicksAbove</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QSlider" name="horizontalSlider">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="tickPosition">
-       <enum>QSlider::TicksAbove</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QComboBox" name="comboBox"/>
-    </item>
-   </layout>
-  </widget>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <property name="spacing">
+      <number>6</number>
+     </property>
+     <item row="1" column="0">
+      <widget class="QSlider" name="horizontalSlider">
+       <property name="maximum">
+        <number>550</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::TicksAbove</enum>
+       </property>
+       <property name="tickInterval">
+        <number>5</number>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="comboBox"/>
+     </item>
+     <item row="0" column="1">
+      <widget class="QSlider" name="verticalSlider">
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="maximum">
+        <number>550</number>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="invertedAppearance">
+        <bool>true</bool>
+       </property>
+       <property name="invertedControls">
+        <bool>false</bool>
+       </property>
+       <property name="tickPosition">
+        <enum>QSlider::TicksAbove</enum>
+       </property>
+       <property name="tickInterval">
+        <number>5</number>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QWidget" name="drawArea" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>550</width>
+         <height>550</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>
