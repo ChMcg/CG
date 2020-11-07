@@ -1,4 +1,5 @@
 from PyQt5 import QtCore, QtWidgets, QtGui
+from src.Curves import Bezier
 from ui.lab_2 import Ui_Form as ui_lab_2
 from src.Core import v2
 from numpy import linspace
@@ -14,25 +15,16 @@ class DrawArea(QtWidgets.QWidget):
         self.setGeometry(parent.geometry())
         self.mainPen = QtGui.QPen(QtGui.QColor(0x0d47a1), 2)
         self.highlightPen = QtGui.QPen(QtGui.QColor(0xFFA0A0), 3)
-        self.points: List[v2] = [
-            v2(( 10,  10)),
-            v2(( 20, 200)),
-            v2((500,  10))
-        ]
-        self.point = v2((0, 0))
-        self.current_point = self.points[0]
-        self.current_index = 0
-        self.spline_points: List[v2] = []
-        self.calculate_spline()
+        self.minorPen = QtGui.QPen(QtGui.QColor(0xAFAFAF), 1)
         self.mouse_grabbed = False
+        self.curve = Bezier()
 
     def paintEvent(self, a0: QtGui.QPaintEvent) -> None:
-        # print(self.points)
         self.painter = QtGui.QPainter()
         self.painter.begin(self)
         self.painter.setPen(self.mainPen)
-        for i, point in enumerate(self.points):
-            if i == self.current_index:
+        for i, point in enumerate(self.curve.points):
+            if i == self.curve.current_index:
                 self.painter.setPen(self.highlightPen)
                 self.painter.drawEllipse(
                     point.to_QPoint(),
@@ -44,9 +36,15 @@ class DrawArea(QtWidgets.QWidget):
                     point.to_QPoint(),
                     5, 5
                 )
-        self.painter.drawPoint(self.point.to_QPoint())
-        for point in self.spline_points:
+        for point in self.curve.spline_points:
             self.painter.drawPoint(point.to_QPoint())
+        self.painter.setPen(self.minorPen)
+        for i, point in enumerate(self.curve.points):
+            if i != 0:
+                self.painter.drawLine(
+                    self.curve.points[i-1].to_QPoint(),
+                    self.curve.points[i].to_QPoint()
+                )
         self.painter.end()
 
     def mouseMoveEvent(self, event: QtGui.QMouseEvent) -> None:
@@ -56,13 +54,15 @@ class DrawArea(QtWidgets.QWidget):
             self.current_index_changed.emit()
 
     def mousePressEvent(self, event: QtGui.QMouseEvent) -> None:
-        for i, point in enumerate(self.points):
+        print('mouse grab:', self.curve.points, '<-', (event.pos().x(), event.pos().y()))
+        for i, point in enumerate(self.curve.points):
             if QtCore.QLineF(point.to_QPoint(), event.pos()).length() < 20:
                 self.mouse_grabbed = True
-                self.current_index = i
+                self.curve.current_index = i
                 self.current_index_changed.emit()
                 return
-        self.current_index = -1
+        # self.curve.current_index = -1
+        self.mouse_grabbed = False
         self.repaint()
 
     def mouseReleaseEvent(self, a0: QtGui.QMouseEvent) -> None:
@@ -72,26 +72,34 @@ class DrawArea(QtWidgets.QWidget):
         self.point = v2((x, y))
         self.repaint()
 
-    def calculate_spline(self):
-        x = [point.x for point in self.points]
-        y = [point.y for point in self.points]
-        self.spline_points.clear()
-        for t in linspace(0, 1, 100):
-            tmp = (
-                (1-t)**2*x[0] + 2*(1-t)*t*x[1] + t**2 * x[2],
-                (1-t)**2*y[0] + 2*(1-t)*t*y[1] + t**2 * y[2]
-            )
-            self.spline_points.append(v2(tmp))
-
     def move_point(self, x, y):
-        self.current_point = v2((x, y))
-        ci = self.current_index
-        self.points[ci] = v2((x,y))
-        self.calculate_spline()
+        self.curve.current_point = v2((x, y))
+        ci = self.curve.current_index
+        if ci == -1:
+            return
+        self.curve.points[ci] = v2((x,y))
+        self.curve.calculate()
         self.repaint()
 
-    def set_current_index(self, index):
-        self.current_index = index
+    def add_point(self):
+        # print(self.curve.points)
+        last = self.curve.points[-1]
+        points = self.curve.points[:-1]
+        points.extend(
+            [
+                v2((500, 500)),
+                last
+            ]
+        )
+        self.curve = Bezier(points)
+        self.curve.calculate()
+        self.repaint()
+
+    def remove_point(self):
+        points = self.curve.points[:-2] + [self.curve.points[-1],]
+        self.curve = Bezier(points)
+        self.curve.calculate()
+        self.repaint()
 
 
 class Lab_2(QtWidgets.QWidget):
@@ -111,6 +119,8 @@ class Lab_2(QtWidgets.QWidget):
         # self.ui.horizontalSlider.valueChanged.connect(self.s_update_point_position)
         # self.ui.verticalSlider.valueChanged.connect(self.s_update_point_position)
         self.drawArea.current_index_changed.connect(self.s_reveal_current_point)
+        self.ui.addPointButton.clicked.connect(self.s_add_point)
+        self.ui.removePointButton.clicked.connect(self.s_remove_point)
 
     def s_update_sliders(self):
         self.drawArea.set_point(
@@ -119,9 +129,9 @@ class Lab_2(QtWidgets.QWidget):
         )
 
     def s_update_current_point(self):
-        self.drawArea.set_current_index(self.ui.comboBox.currentIndex())
-        ci = self.drawArea.current_index
-        x, y = self.drawArea.points[ci].to_list()
+        self.drawArea.curve.set_current_index(self.ui.comboBox.currentIndex())
+        ci = self.drawArea.curve.current_index
+        x, y = self.drawArea.curve.points[ci].to_list()
         self.ui.horizontalSlider.setValue(x)
         self.ui.verticalSlider.setValue(y)
         self.drawArea.repaint()
@@ -136,8 +146,8 @@ class Lab_2(QtWidgets.QWidget):
         # self.drawArea.repaint()
 
     def s_reveal_current_point(self):
-        ci = self.drawArea.current_index
-        x, y = self.drawArea.points[ci].to_list()
+        ci = self.drawArea.curve.current_index
+        x, y = self.drawArea.curve.points[ci].to_list()
         if ci == -1:
             return
         else:
@@ -145,4 +155,8 @@ class Lab_2(QtWidgets.QWidget):
         self.ui.horizontalSlider.setValue(x)
         self.ui.verticalSlider.setValue(y)
 
+    def s_add_point(self):
+        self.drawArea.add_point()
 
+    def s_remove_point(self):
+        self.drawArea.remove_point()

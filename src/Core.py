@@ -49,6 +49,13 @@ class v3:
         m: matrix = self.m * sec
         return m
 
+    def __rmul__(self, sec: matrix):
+        if isinstance(sec, int):
+            m = sec*self.m
+            return v3(tuple(chain(*m.tolist())))
+        else:
+            raise NotImplementedError()
+
     def __truediv__(self, other: int) -> v3:
         m: matrix = self.m * (1 / other)
         return v3(tuple(chain(*m.tolist())))

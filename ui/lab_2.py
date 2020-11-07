@@ -45,6 +45,15 @@ class Ui_Form(object):
         self.drawArea.setObjectName("drawArea")
         self.gridLayout.addWidget(self.drawArea, 0, 0, 1, 1)
         self.verticalLayout.addLayout(self.gridLayout)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.addPointButton = QtWidgets.QPushButton(Form)
+        self.addPointButton.setObjectName("addPointButton")
+        self.horizontalLayout.addWidget(self.addPointButton)
+        self.removePointButton = QtWidgets.QPushButton(Form)
+        self.removePointButton.setObjectName("removePointButton")
+        self.horizontalLayout.addWidget(self.removePointButton)
+        self.verticalLayout.addLayout(self.horizontalLayout)
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem)
 
@@ -54,3 +63,5 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
+        self.addPointButton.setText(_translate("Form", "Добавить точку"))
+        self.removePointButton.setText(_translate("Form", "Удалить точку"))
