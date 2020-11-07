@@ -1,5 +1,4 @@
 from src.Core import v2, v3
-# from Core import v2, v3
 from typing import Literal, Tuple, List
 from numpy import linspace
 from math import factorial
