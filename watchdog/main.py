@@ -7,11 +7,14 @@ from watchdog.events import FileSystemEventHandler, FileCreatedEvent
 class Handler(FileSystemEventHandler):
     def __init__(self, observer: Observer = None):
         self.observer = observer or None
+        self.logfile = open('history.log', 'a')
 
     def on_created(self, event: FileCreatedEvent):
         if re.match(r'.*\.ui$', event.src_path):
             t = time.strftime('%Y-%m-%d_%H:%M', time.localtime())
             print(f"[{t}]", event.src_path)
+            self.logfile.write(' '.join([f"[{t}]", event.src_path]) + '\n')
+            self.logfile.flush()
             src: str = event.src_path
             new_src = src.replace('.ui', '.py')
             # apt install pyqt5-dev-tools
