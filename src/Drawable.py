@@ -1,6 +1,9 @@
+from functools import reduce
 from PyQt5 import QtCore, QtGui, QtWidgets, Qt
 from PyQt5.QtCore import QPoint
 from typing import Literal, Tuple, List
+
+from numpy.core.fromnumeric import sort
 from src.Core import v2, v3
 from enum import Enum
 
@@ -8,6 +11,7 @@ from enum import Enum
 class Cube:
     def __init__(self, side: int = 20, center: Tuple[int, int, int] = (0, 0, 0)):
         self.center = center
+        self.polygons = []
         self.points = self.generate(side, center)
         self.conn = self.gen_connection()
         self.lines = self.gen_lines()
@@ -22,6 +26,30 @@ class Cube:
     def draw(self, painter: QtGui.QPainter):
         for line in self.lines:
             painter.drawLine(line)
+
+    def draw_polygons(self, painter: QtGui.QPainter):
+        # for polygon in self.polygons:
+        #     # p = [(x+v3(self.center)).to_v2().to_QPoint() for x in map(lambda i: self.points[i-1], polygon)]
+        #     p = [x for x in map(lambda i: self.points[i-1], polygon)]
+        #     c = reduce(lambda x, y: x+y, p) / 4
+        #     p = [(x+v3(self.center)).to_v2().to_QPoint() for x in p]
+        #     painter.drawPolygon(QtGui.QPolygon(p))
+        centers = [
+            reduce(lambda a, b: a+b, p.__list__()) / 4
+            for p in [
+                x
+                for polygon in self.polygons
+                for x in map(lambda i: self.points[i-1], polygon)
+            ]
+        ]
+        polygons = list(zip(self.polygons, centers))
+        polygons.sort(key=lambda x: x[1])
+        print(polygons)
+        a = 1
+        
+
+
+
 
     def generate(self, side: int, center: Tuple[int, int, int]) -> List[v3]:
         hs = side // 2
@@ -50,6 +78,16 @@ class Cube:
         top = {
             (2, 3), (6, 7), (2, 6), (3, 7)
         }
+        self.polygons.extend(
+            [
+                [1, 2, 6, 5],
+                [2, 6, 7, 3],
+                [3, 4, 8, 7],
+                [1, 5, 8, 4],
+                [1, 2, 3, 4],
+                [5, 6, 7, 8]
+            ]
+        )
         return {*left, *bottom, *right, *top}
 
     def gen_lines(self) -> List[QtCore.QLine]:
