@@ -51,15 +51,15 @@ class DrawArea(QtWidgets.QWidget):
         if self.mouse_grabbed:
             x, y = event.x(), event.y()
             self.move_point(x,y)
-            self.current_index_changed.emit()
+            # self.current_index_changed.emit()
 
     def mousePressEvent(self, event: QtGui.QMouseEvent) -> None:
-        print('mouse grab:', self.curve.points, '<-', (event.pos().x(), event.pos().y()))
         for i, point in enumerate(self.curve.points):
             if QtCore.QLineF(point.to_QPoint(), event.pos()).length() < 20:
-                self.mouse_grabbed = True
                 self.curve.current_index = i
-                self.current_index_changed.emit()
+                self.mouse_grabbed = True
+                # self.current_index_changed.emit()
+                self.repaint()
                 return
         # self.curve.current_index = -1
         self.mouse_grabbed = False
@@ -82,7 +82,6 @@ class DrawArea(QtWidgets.QWidget):
         self.repaint()
 
     def add_point(self):
-        # print(self.curve.points)
         last = self.curve.points[-1]
         points = self.curve.points[:-1]
         points.extend(
@@ -115,6 +114,9 @@ class Lab_2(QtWidgets.QWidget):
         )
 
     def setup_connections(self):
+        self.ui.horizontalSlider.setEnabled(False)
+        self.ui.verticalSlider.setEnabled(False)
+        self.ui.comboBox.setEnabled(False)
         self.ui.comboBox.currentIndexChanged.connect(self.s_update_current_point)
         # self.ui.horizontalSlider.valueChanged.connect(self.s_update_point_position)
         # self.ui.verticalSlider.valueChanged.connect(self.s_update_point_position)
