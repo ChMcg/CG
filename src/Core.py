@@ -50,7 +50,7 @@ class v3:
         return m
 
     def __rmul__(self, sec: matrix):
-        if isinstance(sec, int):
+        if isinstance(sec, int) or isinstance(sec, float):
             m = sec*self.m
             return v3(tuple(chain(*m.tolist())))
         else:
@@ -97,6 +97,10 @@ class v3:
         self.x_rotate(rX)
         self.y_rotate(rY)
         self.z_rotate(rZ)
+
+    def from_matrix(m: matrix):
+        assert m.shape == (3,1)
+        return v3(tuple(chain(*m.tolist())))
 
 
 def point_3d(x: int, y: int, z: int) -> matrix:
