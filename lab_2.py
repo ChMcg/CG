@@ -36,8 +36,11 @@ class DrawArea(QtWidgets.QWidget):
                     point.to_QPoint(),
                     5, 5
                 )
-        for point in self.curve.spline_points:
-            self.painter.drawPoint(point.to_QPoint())
+        for a, b in zip(self.curve.spline_points[0::], self.curve.spline_points[1::]):
+            self.painter.drawLine(
+                a.to_QPoint(),
+                b.to_QPoint()
+            )
         self.painter.setPen(self.minorPen)
         for i, point in enumerate(self.curve.points):
             if i != 0:
