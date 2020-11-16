@@ -27,7 +27,7 @@ class Bezier:
         y = [point.y for point in self.points]
         n = self.n
         self.spline_points.clear()
-        for t in linspace(0, 1, 100):
+        for t in linspace(0, 1, 50):
             tmp_x = sum([
                 self.N(i, n, t)*x[i]
                 for i in range(0,n+1)
