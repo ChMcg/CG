@@ -14,7 +14,7 @@ class Bezier:
 
     def __init__(self, points: List[v3] = default_points):
         self.points: List[v2] = points
-        print(points)
+        # print(points)
         self.n = len(points) - 1
         self.point = v2((0, 0))
         self.current_point = self.points[0]

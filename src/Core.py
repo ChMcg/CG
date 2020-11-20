@@ -7,17 +7,31 @@ from numpy.matrixlib import matrix
 from math import sin, cos, radians
 
 
-class v2:
+class Point():
+    def __init__(self, dim: int) -> None:
+        self.dim = dim
+        pass
+
+    def to_QPoint(self) -> QtCore.QPoint:
+        raise NotImplementedError()
+
+
+class v2(Point):
     def __init__(self, vec: Tuple[int, int]):
+        super().__init__(2)
         self.m = point_2d(*vec)
         self.x, self.y = vec
 
     def __str__(self) -> str:
-        tmp = ','.join([str(x) for x in list(chain(*self.m.tolist()))])
+        tmp = ','.join([f"{x:.2f}" for x in list(chain(*self.m.tolist()))])
         return f"({tmp})"
     
     def __repr__(self) -> str:
         return str(self)
+
+    def __add__(self, other: v2) -> v2:
+        m: matrix = self.m + other.m
+        return v2(tuple(chain(*m.tolist())))
 
     def to_QPoint(self) -> QtCore.QPoint:
         x, y = list(chain(*self.m.tolist()))
@@ -27,8 +41,9 @@ class v2:
         return list(chain(*self.m.tolist()))
 
 
-class v3:
+class v3(Point):
     def __init__(self, vec: Tuple[int, int, int]):
+        super().__init__(3)
         self.m = point_3d(*vec)
 
     def __str__(self) -> str:
@@ -97,6 +112,7 @@ class v3:
         self.x_rotate(rX)
         self.y_rotate(rY)
         self.z_rotate(rZ)
+        return self
 
     def from_matrix(m: matrix):
         assert m.shape == (3,1)
