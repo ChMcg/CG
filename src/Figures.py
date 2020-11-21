@@ -33,6 +33,17 @@ class Line():
         c = -x_2*(y_1 - y_2) + y_2*(x_1 - x_2)
         return (a, b, c)
 
+    def contains(self, point: v2, alg: str = 'simple') -> bool:
+        x_1, y_1 = self.A.to_list()
+        x_2, y_2 = self.B.to_list()
+        a, b, c = self.canonical
+        x, y = point.to_list()
+        if alg == 'simple':
+            if a*x + b*y + c == 0:
+                if y_1 <= y and y <= y_2:
+                    return True
+        return False
+
 
     def intersection(self, line: Line, cache: Dict[Tuple, v2] = None) -> Union[v2, None]:
         if cache:
