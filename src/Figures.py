@@ -8,6 +8,7 @@ from src.Core import Point, v2
 class Line():
     def __init__(self, a: Point, b: Point) -> None:
         self.A, self.B = a, b
+        self.canonical = Line.make_canonical(a, b)
     
     def __str__(self) -> str:
         return f"<Line [{self.A}, {self.B}]>"
@@ -24,6 +25,13 @@ class Line():
     def draw(self, painter: QtGui.QPainter, offset: QPoint = QPoint(0, 0)):
         painter.drawLine(self.to_QLine(offset))
 
+    def make_canonical(A, B):
+        x_1, y_1 = A
+        x_2, y_2 = B
+        a = y_1 - y_2
+        b = x_2 - x_1
+        c = -x_2*(y_1 - y_2) + y_2*(x_1 - x_2)
+        return (a, b, c)
 
 
 class Polygon():
