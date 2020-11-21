@@ -25,7 +25,7 @@ class Line():
     def draw(self, painter: QtGui.QPainter, offset: QPoint = QPoint(0, 0)):
         painter.drawLine(self.to_QLine(offset))
 
-    def make_canonical(A, B):
+    def make_canonical(A, B) -> Tuple[int]:
         x_1, y_1 = A
         x_2, y_2 = B
         a = y_1 - y_2
