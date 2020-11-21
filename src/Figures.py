@@ -7,18 +7,18 @@ from src.Core import Point, v2
 
 class Line():
     def __init__(self, a: Point, b: Point) -> None:
-        self.a, self.b = a, b
+        self.A, self.B = a, b
     
     def __str__(self) -> str:
-        return f"<Line [{self.a}, {self.b}]>"
+        return f"<Line [{self.A}, {self.B}]>"
     
     def __repr__(self) -> str:
         return str(self)
     
     def to_QLine(self, offset: QtCore.QPoint = QtCore.QPoint(0, 0)) -> QtCore.QLine:
         return QtCore.QLine(
-            self.a.to_QPoint() + offset,
-            self.b.to_QPoint() + offset
+            self.A.to_QPoint() + offset,
+            self.B.to_QPoint() + offset
         )
     
     def draw(self, painter: QtGui.QPainter, offset: QPoint = QPoint(0, 0)):
