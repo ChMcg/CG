@@ -1,14 +1,25 @@
 from __future__ import annotations
 from PyQt5 import QtCore, QtGui, QtWidgets, Qt
-from typing import Literal, Tuple, List
+from typing import Dict, Literal, Tuple, List, Union
+from numpy.matrixlib.defmatrix import matrix as M
+import numpy as np
 
 from PyQt5.QtCore import QPoint
 from src.Core import Point, v2
+
+class LineCounter():
+    counter = 0
+    
+    @staticmethod
+    def new_id() -> int:
+        LineCounter.counter += 1
+        return LineCounter.counter
 
 class Line():
     def __init__(self, a: Point, b: Point) -> None:
         self.A, self.B = a, b
         self.canonical = Line.make_canonical(a, b)
+        self.id = LineCounter.new_id()
     
     def __str__(self) -> str:
         return f"<Line [{self.A}, {self.B}]>"
