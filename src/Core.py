@@ -40,6 +40,9 @@ class v2(Point):
     def to_list(self) -> List[int]:
         return list(chain(*self.m.tolist()))
 
+    def __list__(self) -> List[int]:
+        return self.to_list()
+
 
 class v3(Point):
     def __init__(self, vec: Tuple[int, int, int]):
