@@ -44,7 +44,7 @@ class Cube:
         ]
         polygons = list(zip(self.polygons, centers))
         polygons.sort(key=lambda x: x[1])
-        print(polygons)
+        # print(polygons)
         a = 1
         
 
