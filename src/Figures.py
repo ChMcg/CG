@@ -165,3 +165,8 @@ class Polygon():
         self.regenerate_lines()
 
 
+if __name__ == "__main__":
+    a = Line(v2([0,1]),v2([6,4]))
+    b = Line(v2([8,8]),v2([8,0]))
+    C = a.intersection(b)
+    p = v2([0,1])
