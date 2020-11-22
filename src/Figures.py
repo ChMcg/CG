@@ -120,6 +120,18 @@ class Polygon():
         #     )
     
     def contains(self, point: v2, offset: QPoint):
+        temp_line = Line(point, v2([self.x_r_max + 2, point.y]))
+        cnt = 0
+        for line in self.lines:
+            intersection = line.intersection(temp_line, self.cache)
+            if line.contains(intersection) and temp_line.contains(intersection):
+                cnt += 1
+        if cnt % 2 == 0:
+            return False
+        else:
+            return True
+
+    def qt_contains(self, point: v2, offset: QPoint):
         self.qt_poly = QtGui.QPolygon([x.to_QPoint() for x in self.points])
         return self.qt_poly.containsPoint(
             point.to_QPoint(),
