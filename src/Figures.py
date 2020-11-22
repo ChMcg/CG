@@ -53,14 +53,20 @@ class Line():
         return (a, b, c)
 
     def contains(self, point: v2, alg: str = 'simple') -> bool:
-        x_1, y_1 = self.A.to_list()
-        x_2, y_2 = self.B.to_list()
+        if point is None:
+            return False
+        y_max = max([self.A.y, self.B.y])
+        y_min = min([self.A.y, self.B.y])
+        x_max = max([self.A.x, self.B.x])
+        x_min = min([self.A.x, self.B.x])
         a, b, c = self.canonical
         x, y = point.to_list()
         if alg == 'simple':
-            if a*x + b*y + c == 0:
-                if y_1 <= y and y <= y_2:
-                    return True
+            res = a*x + b*y + c
+            if a*x + b*y + c < 10**-9:
+                if y - y_min + 10**-9 >= 0 and y_max-y + 10**-9 >= 0:
+                    if x - x_min + 10**-9 >= 0 and x_max-x + 10**-9 >= 0:
+                        return True
         return False
 
 
