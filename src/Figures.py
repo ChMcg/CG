@@ -71,26 +71,27 @@ class Line():
 
 
     def intersection(self, line: Line, cache: Dict[Tuple, v2] = None) -> Union[v2, None]:
-        if cache:
-            id_pair = frozenset({self.id, line.id})
+        id_pair = frozenset({self.id, line.id})
+        if cache is not None:
             if id_pair in cache.keys():
                 return cache[id_pair]
-        else:
-            a_1, b_1, c_1 = self.canonical
-            a_2, b_2, c_2 = line.canonical
-            a = M([
-                    [a_1, b_1],
-                    [a_2, b_2]
-                ])
-            b = M([
-                    [-c_1],
-                    [-c_2]
-                ])
+        a_1, b_1, c_1 = self.canonical
+        a_2, b_2, c_2 = line.canonical
+        a = M([
+                [a_1, b_1],
+                [a_2, b_2]
+            ])
+        b = M([
+                [-c_1],
+                [-c_2]
+            ])
+        try:
             x = np.linalg.inv(a) * b
-            if cache:
-                #TODO
-                pass
-            return Point.from_matrix(x)
+        except np.linalg.LinAlgError:
+            return None
+        if cache is not None:
+            cache[id_pair] = Point.from_matrix(x)
+        return Point.from_matrix(x)
 
 class Polygon():
     def __init__(self, points: List[v2]):
