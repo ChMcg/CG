@@ -96,9 +96,19 @@ class Line():
 class Polygon():
     def __init__(self, points: List[v2]):
         self.points: List[v2] = points
+        self.lines: List[Line] = []
+        self.cache: Dict[set, v2] = dict()
+        self.regenerate_lines()
         self.qt_poly = QtGui.QPolygon([x.to_QPoint() for x in points])
         self.ci = 0
-    
+        self.x_r_max = max([point.x for point in self.points])
+
+    def regenerate_lines(self):
+        self.lines.clear()
+        self.cache.clear()
+        for A,B in zip(self.points[::1], self.points[1::1] + [self.points[0],]):
+            self.lines.append(Line(A,B))
+
     def draw(self, painter: QtGui.QPainter, offset: QtCore.QPoint = QtCore.QPoint(0, 0)):
         for a, b in zip(self.points[::1], self.points[1::1] + [self.points[0],]):
             painter.drawLine(
@@ -148,3 +158,10 @@ class Polygon():
     
     def move_point(self, pos: v2):
         self.points[self.ci] = pos
+        # if self.x_r_max < pos.x:
+        #     self.x_r_max = pos.x
+        #TODO: хранить индекс самого самой правой точки
+        self.x_r_max = max([point.x for point in self.points])
+        self.regenerate_lines()
+
+
