@@ -18,6 +18,17 @@ class Point():
     def to_list(self) -> List[int]:
         raise NotImplementedError()
 
+    def from_matrix(m: matrix):
+        a, b = m.shape
+        # assert m.shape == (3,1)
+        assert b == 1
+        if a == 2:
+            return v2(tuple(chain(*m.tolist())))
+        elif a == 3:
+            return v3(tuple(chain(*m.tolist())))
+        else:
+            raise NotImplementedError()
+
 
 class v2(Point):
     def __init__(self, vec: Tuple[int, int]):
