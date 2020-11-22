@@ -9,9 +9,10 @@ from random import randint
 
 
 class DrawArea(QtWidgets.QWidget):
-    mainPen         = QtGui.QPen(QtGui.QColor(0x0d47a1), 1)
-    highlightPen    = QtGui.QPen(QtGui.QColor(0xFFA0A0), 3)
-    borderPen       = QtGui.QPen(QtGui.QColor(0xA0A0A0), 4)
+    mainPen             = QtGui.QPen(QtGui.QColor(0x0d47a1), 1)
+    highlightPen        = QtGui.QPen(QtGui.QColor(0xFFA0A0), 3)
+    borderPen           = QtGui.QPen(QtGui.QColor(0xA0A0A0), 4)
+    tempHighlightPen    = QtGui.QPen(QtGui.QColor(0xFF0000), 1)
 
     def __init__(self, parent: QtWidgets.QWidget):
         super().__init__(parent)
@@ -75,6 +76,7 @@ class DrawArea(QtWidgets.QWidget):
         self.draw_polygon_points(painter)
         self.draw_polygon_current_point(painter)
         self.draw_highlited_lines(painter)
+        # self.temp_highlight(painter, self.center)
         painter.end()
     
     def mousePressEvent(self, event: QtGui.QMouseEvent) -> None:
@@ -152,6 +154,19 @@ class DrawArea(QtWidgets.QWidget):
             self.poly.points[ci].to_QPoint() + self.center,
             5, 5
         )
+
+    @with_pen(tempHighlightPen)
+    def temp_highlight(self, painter: QtGui.QPainter):
+        for i, line in enumerate(self.lines):
+            if i < self.limit:
+                Line(line.A, v2([self.poly.x_r_max, line.A.y])).draw(painter, self.center)
+                Line(line.B, v2([self.poly.x_r_max, line.B.y])).draw(painter, self.center)
+        for key, point in self.poly.cache.items():
+            painter.drawEllipse(
+                point.to_QPoint() + self.center,
+                2,2
+            )
+        
 
     @with_pen(highlightPen)
     def draw_highlited_lines(self, painter: QtGui.QPainter):

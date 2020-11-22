@@ -35,6 +35,14 @@ class Line():
     
     def draw(self, painter: QtGui.QPainter, offset: QPoint = QPoint(0, 0)):
         painter.drawLine(self.to_QLine(offset))
+        # painter.drawText(
+        #     self.A.to_QPoint() + offset,
+        #     str(self.A)
+        # )
+        # painter.drawText(
+        #     self.B.to_QPoint() + offset,
+        #     str(self.B)
+        # )
 
     def make_canonical(A: v2, B: v2) -> Tuple[int]:
         x_1, y_1 = A.to_list()
@@ -90,6 +98,19 @@ class Polygon():
                 a.to_QPoint() + offset,
                 b.to_QPoint() + offset
             )
+            # painter.drawText(
+            #     a.to_QPoint() + offset,
+            #     str(a)
+            # )
+            # painter.drawText(
+            #     b.to_QPoint() + offset,
+            #     str(b)
+            # )
+        # for key, point in self.cache:
+        #     painter.drawEllipse(
+        #         point.to_QPoint() + offset,
+        #         2,2
+        #     )
     
     def contains(self, point: v2, offset: QPoint):
         self.qt_poly = QtGui.QPolygon([x.to_QPoint() for x in self.points])
