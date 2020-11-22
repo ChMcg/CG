@@ -15,6 +15,9 @@ class Point():
     def to_QPoint(self) -> QtCore.QPoint:
         raise NotImplementedError()
 
+    def to_list(self) -> List[int]:
+        raise NotImplementedError()
+
 
 class v2(Point):
     def __init__(self, vec: Tuple[int, int]):
