@@ -131,6 +131,13 @@ class Polygon():
         else:
             return True
 
+    def intersection(self, other_line: Line):
+        for line in self.lines:
+            intersection = line.intersection(other_line, self.cache)
+            if line.contains(intersection) and other_line.contains(intersection):
+                return intersection
+        return None
+
     def qt_contains(self, point: v2, offset: QPoint):
         self.qt_poly = QtGui.QPolygon([x.to_QPoint() for x in self.points])
         return self.qt_poly.containsPoint(
