@@ -42,6 +42,7 @@ class DrawArea(QtWidgets.QWidget):
         self.max_l = 50
         self.active_lines = set()
         self.generate_new_lines()
+        self.partially_visible_lines: List[Line] = []
     
 
     def generate_new_lines(self):
@@ -107,11 +108,19 @@ class DrawArea(QtWidgets.QWidget):
 
     def map_lines(self):
         self.active_lines.clear()
+        self.partially_visible_lines.clear()
         for i, line in enumerate(self.lines):
-            # print()
             if i < self.limit:
-                if self.poly.contains(line.a, self.center) or self.poly.contains(line.b, self.center):
+                if self.poly.contains(line.A, self.center) and self.poly.contains(line.B, self.center):
                     self.active_lines.add(i)
+                elif self.poly.contains(line.A, self.center):
+                    intersection = self.poly.intersection(line)
+                    if intersection is not None:
+                        self.partially_visible_lines.append(Line(line.A, intersection))
+                elif self.poly.contains(line.B, self.center):
+                    intersection = self.poly.intersection(line)
+                    if intersection is not None:
+                        self.partially_visible_lines.append(Line(intersection, line.B))
     
     def with_pen(pen: QtGui.QPen):
         def dec(func):
@@ -129,10 +138,8 @@ class DrawArea(QtWidgets.QWidget):
     
     @with_pen(mainPen)
     def draw_lines(self, painter: QtGui.QPainter):
-        # for line in self.lines:
-        #     painter.drawLine(line.to_QLine(self.center))
         for i in range(self.limit):
-            painter.drawLine(self.lines[i].to_QLine(self.center))
+            self.lines[i].draw(painter, self.center)
     
     @with_pen(borderPen)
     def draw_border(self, painter: QtGui.QPainter):
@@ -173,6 +180,8 @@ class DrawArea(QtWidgets.QWidget):
         for i in self.active_lines:
             if i < self.limit:
                 self.lines[i].draw(painter, self.center)
+        for line in self.partially_visible_lines:
+            line.draw(painter, self.center)
 
 
     def handle_resize(self):
