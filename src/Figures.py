@@ -160,7 +160,7 @@ class Polygon():
         self.points[self.ci] = pos
         # if self.x_r_max < pos.x:
         #     self.x_r_max = pos.x
-        #TODO: хранить индекс самого самой правой точки
+        #TODO: хранить индекс самой правой точки
         self.x_r_max = max([point.x for point in self.points])
         self.regenerate_lines()
 

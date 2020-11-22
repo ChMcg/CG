@@ -4,7 +4,6 @@ from ui.lab_4 import Ui_Form as ui_lab_4
 from src.Core import Point, v2, v3
 from src.Figures import Line, Polygon
 from typing import Literal, Tuple, List
-from src.Surfaces import BilinearSurface
 from random import randint
 
 
@@ -32,11 +31,6 @@ class DrawArea(QtWidgets.QWidget):
                 v2([  0, 200]),
                 v2([200, 200]),
                 v2([200,   0]),
-                # v2([ 0*2, 0*2]),
-                # v2([50*2, 0*2]),
-                # v2([50*2,60*2]),
-                # v2([40*2,70*2]),
-                # v2([ 0*2,60*2])
             ],
         )
         self.max_l = 50
@@ -70,7 +64,6 @@ class DrawArea(QtWidgets.QWidget):
         painter = QtGui.QPainter()
         painter.begin(self)
         painter.setPen(self.mainPen)
-        # self.draw_window(painter)
         self.draw_lines(painter)
         self.draw_border(painter)
         self.poly.draw(painter, self.center)
@@ -85,7 +78,6 @@ class DrawArea(QtWidgets.QWidget):
             if QtCore.QLineF(point.to_QPoint() + self.center, event.pos()).length() < 20:
                 self.mouse_grabbed = True
                 self.poly.ci = i
-                # print('mouse grabbed:', i)
                 break
 
     def mouseMoveEvent(self, event: QtGui.QMouseEvent) -> None:
@@ -97,8 +89,6 @@ class DrawArea(QtWidgets.QWidget):
                     y - self.h//2
                 ])
             )
-            # pass
-        # print([x, y])
         self.repaint()
     
     def mouseReleaseEvent(self, event: QtGui.QMouseEvent) -> None:
@@ -131,11 +121,6 @@ class DrawArea(QtWidgets.QWidget):
             return wrapper
         return dec
 
-    @with_pen(mainPen)
-    def draw_window(self, painter: QtGui.QPainter):
-        # for line in self.lines
-        painter.drawLine(self.line.to_QLine(self.center))
-    
     @with_pen(mainPen)
     def draw_lines(self, painter: QtGui.QPainter):
         for i in range(self.limit):
@@ -173,7 +158,6 @@ class DrawArea(QtWidgets.QWidget):
                 point.to_QPoint() + self.center,
                 2,2
             )
-        
 
     @with_pen(highlightPen)
     def draw_highlited_lines(self, painter: QtGui.QPainter):
@@ -182,7 +166,6 @@ class DrawArea(QtWidgets.QWidget):
                 self.lines[i].draw(painter, self.center)
         for line in self.partially_visible_lines:
             line.draw(painter, self.center)
-
 
     def handle_resize(self):
         h, w = [self.geometry().height(), self.geometry().width()]
