@@ -7,6 +7,13 @@ import numpy as np
 from PyQt5.QtCore import QPoint
 from src.Core import Point, v2
 
+class Figure():
+    def __init__(self) -> None:
+        pass
+
+    def draw(self, painter: QtGui.QPainter, offset: QtCore.QPoint = QtCore.QPoint(0, 0)):
+        raise NotImplementedError()
+
 class LineCounter():
     counter = 0
     
@@ -15,7 +22,7 @@ class LineCounter():
         LineCounter.counter += 1
         return LineCounter.counter
 
-class Line():
+class Line(Figure):
     def __init__(self, a: Point, b: Point) -> None:
         self.A, self.B = a, b
         self.canonical = Line.make_canonical(a, b)
@@ -69,7 +76,6 @@ class Line():
                         return True
         return False
 
-
     def intersection(self, line: Line, cache: Dict[Tuple, v2] = None) -> Union[v2, None]:
         id_pair = frozenset({self.id, line.id})
         if cache is not None:
@@ -93,7 +99,7 @@ class Line():
             cache[id_pair] = Point.from_matrix(x)
         return Point.from_matrix(x)
 
-class Polygon():
+class Polygon(Figure):
     def __init__(self, points: List[v2]):
         self.points: List[v2] = points
         self.lines: List[Line] = []
