@@ -103,5 +103,5 @@ class Ui_Form(object):
         self._cbUseDelay.setText(_translate("Form", "Задержка времени отрисовки"))
         self._lDelayValue.setText(_translate("Form", "30ms"))
         self._cbUseRepaintOnUpdate.setText(_translate("Form", "Отрисовывать при изменении"))
-        self._pbRepaint.setText(_translate("Form", "Отрисовать заново"))
+        self._pbRepaint.setText(_translate("Form", "Отрисовать сцену"))
         self._pbAddFigure.setText(_translate("Form", "Добавить фигуру"))

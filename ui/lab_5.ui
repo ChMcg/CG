@@ -169,7 +169,7 @@
      <item>
       <widget class="QPushButton" name="_pbRepaint">
        <property name="text">
-        <string>Отрисовать заново</string>
+        <string>Отрисовать сцену</string>
        </property>
       </widget>
      </item>

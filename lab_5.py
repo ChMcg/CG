@@ -10,6 +10,7 @@ from random import randint
 class DrawArea(QtWidgets.QWidget):
     mainPen             = QtGui.QPen(QtGui.QColor(0x0d47a1), 1)
     highlightPen        = QtGui.QPen(QtGui.QColor(0xFFA0A0), 3)
+    # highlightPen        = QtGui.QPen(QtGui.QColor(0xFF, 0xA0, 0xA0, 0xA0), 3)
     borderPen           = QtGui.QPen(QtGui.QColor(0xA0A0A0), 4)
     tempHighlightPen    = QtGui.QPen(QtGui.QColor(0xFF0000), 1)
 
@@ -21,6 +22,9 @@ class DrawArea(QtWidgets.QWidget):
         self.setMinimumSize(550, 550)
         parent.resize(parent.minimumSize())
         self.figures: List[Figure] = []
+        self.cf = None
+        self.cache: List[List[Line]] = []
+        self.colors: List[QtGui.QColor] = []
 
     def generate_figures(self) ->  Dict[Tuple[int, str], Figure]:
         ret = {}
@@ -47,29 +51,68 @@ class DrawArea(QtWidgets.QWidget):
         self.draw_border(painter)
         for figure in self.figures:
             figure.draw(painter, self.center)
+            for point in figure.get_points():
+                painter.drawEllipse(
+                    point.to_QPoint() + self.center,
+                    5,5
+                )
+        self.draw_highlited_points(painter)
+        self.draw_cache(painter)
         painter.end()
+
+    def update_cache(self):
+        h, w = [self.geometry().height(), self.geometry().width()]
+        lines = [Line(v2([0,y]), v2([w,y])) for y in range(0,h,3)]
+        c = self.center
+        cache = []
+
+        for y in range(0, h, 3):
+            line = Line(
+                    v2([
+                        0 - c.x(),
+                        y - c.y()
+                    ]), 
+                    v2([
+                        w - c.x(),
+                        y - c.y()
+                    ]), 
+                )
+            line_cache = []
+            for i, figure in enumerate(self.figures):
+                intersection = figure.get_all_intersections(line)
+                if len(intersection) > 0:
+                    for a,b in zip(intersection[::1], intersection[1::1]):
+                        line_cache.append((Line(a,b), self.colors[i]))
+            cache.append(line_cache)
+        self.cache = cache
+
+    def add_figure(self, fig: Figure):
+        self.figures.append(fig)
+        self.colors.append(QtGui.QColor(0xa0a0a0))
     
     def mousePressEvent(self, event: QtGui.QMouseEvent) -> None:
-        pass
-        # for i, point in enumerate(self.poly.points):
-        #     if QtCore.QLineF(point.to_QPoint() + self.center, event.pos()).length() < 20:
-        #         self.mouse_grabbed = True
-        #         self.poly.ci = i
-        #         break
+        for k, figure in enumerate(self.figures):
+            for i, point in enumerate(figure.get_points()):
+                if QtCore.QLineF(point.to_QPoint() + self.center, event.pos()).length() < 20:
+                    self.mouse_grabbed = True
+                    self.cf = k
+                    figure.ci = i
+                    break
 
     def mouseMoveEvent(self, event: QtGui.QMouseEvent) -> None:
         if self.mouse_grabbed:
             x, y = event.x(), event.y()
-            # self.poly.move_point(
-            #     v2([
-            #         x - self.w//2,
-            #         y - self.h//2
-            #     ])
-            # )
+            self.figures[self.cf].move_point(
+                v2([
+                    x - self.w//2,
+                    y - self.h//2
+                ])
+            )
         self.repaint()
     
     def mouseReleaseEvent(self, event: QtGui.QMouseEvent) -> None:
         self.mouse_grabbed = False
+        self.update_cache()
         self.repaint()
 
     def with_pen(pen: QtGui.QPen):
@@ -101,6 +144,24 @@ class DrawArea(QtWidgets.QWidget):
     def draw_border(self, painter: QtGui.QPainter):
         for a, b in zip(self.border[::1], self.border[1::1]):
             painter.drawLine(a,b)
+    
+    @with_pen(highlightPen)
+    def draw_highlited_points(self, painter: QtGui.QPainter):
+        if self.cf is not None:
+            figure = self.figures[self.cf]
+            painter.drawEllipse(
+                figure.get_points()[figure.ci].to_QPoint() + self.center,
+                5,5
+            )
+
+    @with_pen(mainPen)
+    def draw_cache(self, painter: QtGui.QPainter):
+        painter.setPen(QtGui.QPen(QtGui.QColor(0x101010), 3))
+        for line_cache in self.cache:
+            for item in line_cache:
+                line, color = item
+                painter.setPen(QtGui.QPen(color, 3))
+                line.draw(painter, self.center)
 
 
 class Lab_5(QtWidgets.QWidget):
@@ -145,6 +206,7 @@ class Lab_5(QtWidgets.QWidget):
         self.figures = self.drawArea.generate_figures()
         for index, name in self.figures.keys():
             self.ui._cbFigure.addItem(name)
-        self.drawArea.figures.append(list(self.figures.values())[0])
+        # self.drawArea.figures.append(list(self.figures.values())[0])
+        self.drawArea.add_figure(list(self.figures.values())[0])
 
 
