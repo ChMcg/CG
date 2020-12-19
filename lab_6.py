@@ -185,7 +185,6 @@ class GLDrawArea(QtWidgets.QOpenGLWidget):
 
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.advanceGears)
-        # self.timer.start(20)
 
     def setXRotation(self, angle):
         self.normalizeAngle(angle)
@@ -324,6 +323,7 @@ class GLDrawArea(QtWidgets.QOpenGLWidget):
         return list
 
     def paintGL(self) -> None:
+        gl.glClearColor(1.0, 1.0, 1.0, 1.0)
         gl.glClear(gl.GL_COLOR_BUFFER_BIT | gl.GL_DEPTH_BUFFER_BIT)
 
         gl.glPushMatrix()
@@ -385,7 +385,7 @@ class GLDrawArea(QtWidgets.QOpenGLWidget):
             angle -= 360 * 16
     
     def start(self):
-        self.timer.start(100)
+        self.timer.start(30)
     
     def stop(self):
         self.timer.stop()
@@ -399,63 +399,21 @@ class Lab_6(QtWidgets.QWidget):
         self.ui.setupUi(self)
         self.setMouseTracking(True)
         self.drawArea = GLDrawArea(self)
-        self.ui.verticalLayout.addWidget(self.drawArea)
-        # delete(self.ui.moc_drawArea)
-        # # self.drawArea = DrawArea(self.ui.drawArea)
-        # # self.ui.drawArea = self.drawArea
-        # self.drawArea = DrawArea(self)
-        # self.ui.horizontalLayout_4.addWidget(self.drawArea)
-        # self.figures: Dict[Tuple[int, str], Figure] = {}
-        # self.setup_connections()
-        # self.init_figures()
-        # self.ui._cbUseRepaintOnUpdate.click()
+        delete(self.ui.moc_drawArea)
+        self.ui.horizontalLayout.addWidget(self.drawArea)
+        self.gear_running = False
+        self.setup_connections()
 
     def setup_connections(self):
-        pass
-        # self.ui._hsLineWidth.valueChanged.connect(self.s_line_width)
-        # self.ui._cbUseRepaintOnUpdate.clicked.connect(self.s_use_repaint_on_update)
-        # self.ui._hsLinePeriod.valueChanged.connect(self.s_line_period)
-        # self.ui._pbAddFigure.clicked.connect(self.s_add_figure)
+        self.ui.pause.clicked.connect(self.handle_pause)
 
-    # def s_line_width(self):
-    #     lw = self.ui._hsLineWidth.value()
-    #     self.drawArea.line_width = lw
-    #     self.ui._lLineWidth.setText(f"{lw}px")
-    #     self.drawArea.update_cache()
-    #     self.drawArea.repaint()
-
-    # def s_use_repaint_on_update(self):
-    #     self.ui._pbRepaint.setEnabled(
-    #             not self.ui._cbUseRepaintOnUpdate.isChecked()
-    #         )
-    #     self.drawArea.update_on_mouse_move = self.ui._cbUseRepaintOnUpdate.isChecked()
-
-    # def s_line_period(self):
-    #     lp = self.ui._hsLinePeriod.value()
-    #     self.drawArea.line_period = lp
-    #     self.ui._lLinePeriod.setText(f"{lp}px")
-    #     self.drawArea.update_cache()
-    #     self.drawArea.repaint()
-
-    # def init_figures(self):
-    #     self.figures = self.drawArea.generate_figures()
-    #     for index, name in self.figures.keys():
-    #         self.ui._cbFigure.addItem(name)
-        
-    #     # self.drawArea.figures.append(list(self.figures.values())[0])
-    #     # self.drawArea.add_figure(list(self.figures.values())[0])
-    #     # self.drawArea.add_figure(list(self.figures.values())[1])
-    #     self.drawArea.update_cache()
-    #     self.drawArea.repaint()
-
-    # def s_add_figure(self):
-    #     ci = self.ui._cbFigure.currentIndex()
-    #     name = self.ui._cbFigure.currentText()
-    #     self.drawArea.add_figure(
-    #         # copy(self.figures[(ci, name)])
-    #         Polygon(copy(self.figures[(ci, name)].points))
-    #     )
-    #     self.drawArea.update_cache()
-    #     self.drawArea.repaint()
-
+    def handle_pause(self):
+        if self.gear_running:
+            self.drawArea.stop()
+            self.ui.pause.setText('Запуск')
+            self.gear_running = False
+        else:
+            self.drawArea.start()
+            self.ui.pause.setText('Пауза')
+            self.gear_running = True
 

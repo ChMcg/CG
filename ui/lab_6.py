@@ -14,12 +14,21 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(699, 698)
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(Form)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.verticalLayout = QtWidgets.QVBoxLayout()
+        Form.resize(520, 551)
+        self.verticalLayout = QtWidgets.QVBoxLayout(Form)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.verticalLayout_2.addLayout(self.verticalLayout)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.moc_drawArea = QtWidgets.QOpenGLWidget(Form)
+        self.moc_drawArea.setMinimumSize(QtCore.QSize(500, 500))
+        self.moc_drawArea.setMaximumSize(QtCore.QSize(500, 500))
+        self.moc_drawArea.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.moc_drawArea.setObjectName("moc_drawArea")
+        self.horizontalLayout.addWidget(self.moc_drawArea)
+        self.verticalLayout.addLayout(self.horizontalLayout)
+        self.pause = QtWidgets.QPushButton(Form)
+        self.pause.setObjectName("pause")
+        self.verticalLayout.addWidget(self.pause)
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -27,3 +36,4 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
+        self.pause.setText(_translate("Form", "Запуск"))

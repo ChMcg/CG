@@ -5,6 +5,7 @@ from lab_2 import Lab_2
 from lab_3 import Lab_3
 from lab_4 import Lab_4
 from lab_5 import Lab_5
+from lab_6 import Lab_6
 
 
 class Window(QtWidgets.QMainWindow):
@@ -18,7 +19,8 @@ class Window(QtWidgets.QMainWindow):
         self.ui.tabWidget.addTab(Lab_3(self.ui.tabWidget), 'Лабораторная 3')
         self.ui.tabWidget.addTab(Lab_4(self.ui.tabWidget), 'Лабораторная 4')
         self.ui.tabWidget.addTab(Lab_5(self.ui.tabWidget), 'Лабораторная 5')
-        self.ui.tabWidget.setCurrentIndex(5-1)
+        self.ui.tabWidget.addTab(Lab_6(self.ui.tabWidget), 'Лабораторная 6')
+        self.ui.tabWidget.setCurrentIndex(6-1)
         self.ui.tabWidget.setCurrentIndex(1-1)
         self.setGeometry(QtCore.QRect(0, 0, 0, 0))
         self.ui.tabWidget.currentChanged.connect(
