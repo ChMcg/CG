@@ -2,12 +2,7 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 import OpenGL.GL as gl
 from sip import delete
 from ui.lab_6 import Ui_Form as ui_lab_6
-from src.Core import Point, v2, v3
-from src.Figures import Figure,  Line, Polygon
-from typing import Dict, Literal, Tuple, List, Optional
-from random import randint
-from time import sleep
-from copy import copy
+from typing import List, Optional
 import math
 
 
