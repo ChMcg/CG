@@ -7,6 +7,23 @@ import numpy as np
 from PyQt5.QtCore import QPoint
 from src.Core import Point, v2
 
+class Figure():
+    def __init__(self) -> None:
+        pass
+
+    def draw(self, painter: QtGui.QPainter, offset: QtCore.QPoint = QtCore.QPoint(0, 0)):
+        raise NotImplementedError()
+
+    def get_points(self) -> List[Point]:
+        raise NotImplementedError()
+
+    def move_point(self, pos: v2):
+        raise NotImplementedError()
+
+    def get_all_intersections(self, other_line: Line) -> List[Point]:
+        raise NotImplementedError()
+
+
 class LineCounter():
     counter = 0
     
@@ -15,7 +32,7 @@ class LineCounter():
         LineCounter.counter += 1
         return LineCounter.counter
 
-class Line():
+class Line(Figure):
     def __init__(self, a: Point, b: Point) -> None:
         self.A, self.B = a, b
         self.canonical = Line.make_canonical(a, b)
@@ -69,7 +86,6 @@ class Line():
                         return True
         return False
 
-
     def intersection(self, line: Line, cache: Dict[Tuple, v2] = None) -> Union[v2, None]:
         id_pair = frozenset({self.id, line.id})
         if cache is not None:
@@ -93,7 +109,7 @@ class Line():
             cache[id_pair] = Point.from_matrix(x)
         return Point.from_matrix(x)
 
-class Polygon():
+class Polygon(Figure):
     def __init__(self, points: List[v2]):
         self.points: List[v2] = points
         self.lines: List[Line] = []
@@ -163,6 +179,18 @@ class Polygon():
         #TODO: хранить индекс самой правой точки
         self.x_r_max = max([point.x for point in self.points])
         self.regenerate_lines()
+
+    def get_points(self) -> List[Point]:
+        return self.points
+
+    def get_all_intersections(self, other_line: Line) -> List[Point]:
+        ret = []
+        for line in self.lines:
+            intersection = line.intersection(other_line, self.cache)
+            if line.contains(intersection) and other_line.contains(intersection):
+                ret.append(intersection)
+                # return intersection
+        return ret
 
 
 if __name__ == "__main__":

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>570</width>
-    <height>651</height>
+    <height>698</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,36 +15,48 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="QLabel" name="label">
        <property name="minimumSize">
         <size>
-         <width>150</width>
+         <width>180</width>
          <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>150</width>
-         <height>17</height>
+         <width>16777215</width>
+         <height>23</height>
         </size>
        </property>
        <property name="text">
-        <string>Количество отрезков</string>
+        <string>Толщина линии заполнения</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QSlider" name="horizontalSlider">
+      <widget class="QSlider" name="_hsLineWidth">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>23</height>
+        </size>
+       </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>15</height>
+         <height>23</height>
         </size>
        </property>
+       <property name="minimum">
+        <number>2</number>
+       </property>
        <property name="maximum">
-        <number>100</number>
+        <number>10</number>
+       </property>
+       <property name="value">
+        <number>3</number>
        </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -52,7 +64,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="linesCount">
+      <widget class="QLabel" name="_lLineWidth">
        <property name="minimumSize">
         <size>
          <width>50</width>
@@ -61,12 +73,12 @@
        </property>
        <property name="maximumSize">
         <size>
-         <width>50</width>
-         <height>17</height>
+         <width>16777215</width>
+         <height>23</height>
         </size>
        </property>
        <property name="text">
-        <string>0</string>
+        <string>3px</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -76,39 +88,48 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,0,0">
+    <layout class="QHBoxLayout" name="horizontalLayout_6">
      <item>
       <widget class="QLabel" name="label_2">
        <property name="minimumSize">
         <size>
-         <width>150</width>
+         <width>180</width>
          <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>150</width>
-         <height>17</height>
+         <width>16777215</width>
+         <height>23</height>
         </size>
        </property>
        <property name="text">
-        <string>Длина отрезков (макс.)</string>
+        <string>Период линий заполнения</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QSlider" name="horizontalSlider_2">
+      <widget class="QSlider" name="_hsLinePeriod">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>23</height>
+        </size>
+       </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>15</height>
+         <height>23</height>
         </size>
        </property>
        <property name="minimum">
-        <number>50</number>
+        <number>2</number>
        </property>
        <property name="maximum">
-        <number>150</number>
+        <number>10</number>
+       </property>
+       <property name="value">
+        <number>6</number>
        </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -116,7 +137,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="linesLength">
+      <widget class="QLabel" name="_lLinePeriod">
        <property name="minimumSize">
         <size>
          <width>50</width>
@@ -125,12 +146,12 @@
        </property>
        <property name="maximumSize">
         <size>
-         <width>50</width>
-         <height>17</height>
+         <width>16777215</width>
+         <height>23</height>
         </size>
        </property>
        <property name="text">
-        <string>50px</string>
+        <string>6px</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -140,14 +161,39 @@
     </layout>
    </item>
    <item>
-    <widget class="QPushButton" name="generateLinesButton">
-     <property name="text">
-      <string>Пересоздать набор отрезков</string>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,1">
+     <item>
+      <widget class="QCheckBox" name="_cbUseRepaintOnUpdate">
+       <property name="text">
+        <string>Отрисовывать при изменении</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="_pbRepaint">
+       <property name="text">
+        <string>Отрисовать сцену</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="_pbAddFigure">
+       <property name="text">
+        <string>Добавить фигуру</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="_cbFigure"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
       <widget class="QWidget" name="moc_drawArea" native="true">
        <property name="minimumSize">
@@ -155,6 +201,9 @@
          <width>550</width>
          <height>550</height>
         </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">border: 2px double black;</string>
        </property>
       </widget>
      </item>
